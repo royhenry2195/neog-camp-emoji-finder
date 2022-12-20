@@ -10,26 +10,32 @@ const emojiDictionary = {
   "😔": "sad",
   "❤️": "love"
 };
-
+const emojis = Object.keys(emojiDictionary);
 export default function App() {
+  const [emoji, setEmoji] = useState("");
   const [meaning, setMeaning] = useState("");
 
-  function emojiClickHandler(event) {
-    var userInput = event.target.value;
-    var meaning = emojiDictionary[userInput];
+  function changeHandler(event) {
+    const inputEmoji = event.target.value;
+    setEmoji(inputEmoji);
 
-    if (meaning === undefined) {
-      meaning = "not have this value in database";
+    if (inputEmoji in emojiDictionary) {
+      setMeaning(emojiDictionary[inputEmoji]);
+    } else {
+      setMeaning("failure to recognise this emoji");
     }
+  }
 
-    setMeaning(meaning);
+  function emojiClickHandler(inputEmoji) {
+    setMeaning(emojiDictionary[inputEmoji]);
   }
 
   return (
     <div className="App">
       <h1>inside outt</h1>
       <input
-        onChange={emojiClickHandler}
+        value={emoji}
+        onChange={changeHandler}
         placeholder={"Search your emoji"}
         style={{
           padding: "1em",
@@ -38,6 +44,17 @@ export default function App() {
       />
 
       <h2> {meaning}</h2>
+      <hr />
+      <h2>Emojis We know</h2>
+      {emojis.map((emoji) => (
+        <span
+          onClick={() => emojiClickHandler(emoji)}
+          style={{ fontSize: "2rem", padding: "0.5rem", cursor: "pointer" }}
+        >
+          {" "}
+          {emoji}{" "}
+        </span>
+      ))}
     </div>
   );
 }
